@@ -3,11 +3,29 @@ const data={350:['275','HORSEPOWER','Your introduction to TX luxury.','Turbochar
 const tabs=[...document.querySelectorAll('[role="tab"]')];function select(tab){tabs.forEach(t=>{t.setAttribute('aria-selected',String(t===tab));t.tabIndex=t===tab?0:-1});const d=data[tab.dataset.model];['power-number','power-unit','power-title','power-desc'].forEach((id,i)=>document.getElementById(id).textContent=d[i]);document.getElementById('power-panel').setAttribute('aria-labelledby',tab.id)}tabs.forEach((t,i)=>{t.addEventListener('click',()=>select(t));t.addEventListener('keydown',e=>{let next;if(e.key==='ArrowRight')next=(i+1)%tabs.length;if(e.key==='ArrowLeft')next=(i+tabs.length-1)%tabs.length;if(e.key==='Home')next=0;if(e.key==='End')next=tabs.length-1;if(next!==undefined){e.preventDefault();select(tabs[next]);tabs[next].focus()}})});
 // Nonblocking entrance effects. Content remains available without JavaScript.
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('js-motion');const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>io.observe(el))}
-// CINEMATIC INTRO: auto-dismiss, keyboard Escape, Skip, and reduced-motion support.
-const intro=document.querySelector('.cinematic-intro');
-function closeIntro(){document.documentElement.classList.remove('intro-playing');intro.hidden=true;intro.setAttribute('aria-hidden','true');document.querySelector('header').inert=false;document.querySelector('main').inert=false;}
-if(!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('intro-playing');intro.setAttribute('aria-hidden','false');document.querySelector('header').inert=true;document.querySelector('main').inert=true;setTimeout(closeIntro,9500);}
-document.querySelector('.intro-skip').addEventListener('click',closeIntro);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeIntro()});
+// CINEMATIC INTRO: content remains usable; cleanup is registered before playback.
+(() => {
+ const intro = document.querySelector('.cinematic-intro');
+ if (!intro) return;
+ const close = () => {
+   document.documentElement.classList.remove('intro-playing');
+   intro.hidden = true;
+   intro.style.display = 'none';
+   intro.setAttribute('aria-hidden', 'true');
+   document.querySelectorAll('[inert]').forEach(el => el.removeAttribute('inert'));
+ };
+ const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if (reduced) { close(); return; }
+ // Independent timeout and animation-end cleanup prevent a stuck overlay.
+ window.setTimeout(close, 10000);
+ intro.addEventListener('animationend', event => { if(event.target === intro) close(); });
+ intro.querySelector('.intro-skip')?.addEventListener('click', close);
+ document.addEventListener('keydown', event => { if(event.key === 'Escape') close(); });
+ window.addEventListener('pagehide', close);
+ intro.hidden = false;
+ intro.setAttribute('aria-hidden', 'false');
+ document.documentElement.classList.add('intro-playing');
+})();
 // TOOLBAR: browser-native full screen (where supported), refresh, and state sync.
 const fs=document.getElementById('fullscreen-toggle'),status=document.getElementById('tool-status');
 function syncFullscreen(){const on=Boolean(document.fullscreenElement);fs.setAttribute('aria-pressed',String(on));fs.setAttribute('aria-label',on?'Exit full screen':'Enter full screen');fs.title=on?'Exit full screen':'Enter full screen';fs.textContent=on?'⊡':'⛶';}

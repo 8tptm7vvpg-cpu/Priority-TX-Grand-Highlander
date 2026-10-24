@@ -27,3 +27,10 @@ footer.site-footer{display:flex;flex-direction:column;align-items:center;gap:28p
 @media(max-width:800px){.master-brand img{width:180px;height:48px}.master-brand small{font-size:6px}.hero-copy{padding-top:40px}.button.small{padding:9px}.arrow-block{width:30px;height:30px;flex-basis:30px;margin-left:5px}.hero{height:auto;min-height:790px}.hero-copy{padding-bottom:330px}.hero-photo{height:100%;object-position:62% top}.hero-shade{background:linear-gradient(90deg,#000c,#0004),linear-gradient(0deg,#0008,transparent)}footer.site-footer{padding-bottom:170px}.page-tools{bottom:calc(10px + env(safe-area-inset-bottom))}}
 @media(max-width:600px){.hero{min-height:890px}.hero-photo{inset:0;object-position:62% top}.hero-shade{background:linear-gradient(180deg,#000b, #0009 45%,#0001 75%,#0008)}.hero-copy h1{font-size:54px}.master-brand img{width:155px}.master-brand small{max-width:175px}nav .button.small{font-size:9px;letter-spacing:0}.faq summary{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.cinematic-intro{display:none!important}.intro-playing{overflow:auto}}
+
+/* Fail-open content: animation never controls whether the page is readable. */
+.cinematic-intro[hidden]{display:none!important}
+.intro-playing{overflow:auto}
+.js-motion .reveal:not(.visible){opacity:1;transform:none}
+.intro-title{color:#fff}
+@supports ((background-clip:text) or (-webkit-background-clip:text)){.intro-title{color:transparent}}
