@@ -1,1 +1,1 @@
-Version 6.0. Open index.html for the self-contained page. page-source.html is the editable version with separate styles.css, script.js, images and fonts. Inventory buttons currently link to the dealership homepage.
+Version 6.1. Open index.html for the self-contained page. page-source.html is the editable version with separate styles.css, script.js, images and fonts. Inventory buttons currently link to the dealership homepage.
