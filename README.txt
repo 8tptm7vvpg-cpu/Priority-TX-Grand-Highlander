@@ -1,1 +1,1 @@
-Version 5.1. Open index.html for the self-contained landing page. For editing, page-source.html uses the separate styles.css, script.js, fonts and images. Rename page-source.html to index.html if deploying that multi-file version.
+Version 6.0. Open index.html for the self-contained page. page-source.html is the editable version with separate styles.css, script.js, images and fonts. Inventory buttons currently link to the dealership homepage.
